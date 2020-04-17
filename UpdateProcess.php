@@ -6,11 +6,19 @@ class UpdateProcess
     protected $base_name;
     protected $random_folder;
 
-    function __construct($file, $base_name) {
+    public function __construct($file, $base_name) {
 
-        $this->file = $file;
-        $this->base_name = $base_name;
-
+      if (empty($base_name)) {
+        throw new Exception('Empety base_name parameter');
+      }
+    
+      if (!file_exists($file['tmp_name'])) {
+        throw new Exception('Uploaded file does not exist.');
+      }
+    
+      $this->file = $file;
+      $this->base_name = $base_name;
+    
     }
 
     protected function unzip_component() {

@@ -7,13 +7,6 @@ private $new_plugin_metadata;
 private $is_new_plugin_a_file;
 private $is_old_plugin_a_file;
 
-function __construct($file, $base_name) {
-
-  $this->file = $file;
-  $this->base_name = $base_name;
-
-}
-
 public function process() {
   try {
     $this->unzip_component();

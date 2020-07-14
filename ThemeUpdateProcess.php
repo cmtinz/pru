@@ -7,14 +7,16 @@ class ThemeUpdateProcess extends UpdateProcess
         global $wp_filesystem;
         
         try {
-            $this->unzip_component();
+
+            $this->unzip_component(WP_CONTENT_DIR . '/themes/');
+            
             /* Delete old theme folder */
             $theme_folder = WP_CONTENT_DIR . '/themes/' . $this->base_name;
             $delete_folder = $wp_filesystem->rmdir($theme_folder, true);
             if ($delete_folder === false) {
-                throw new Exception('Unable to delete old theme folder');
+              throw new Exception('Unable to delete old theme folder');
             }
-
+            
             /* Move new theme */
             $source_folder = $this->random_folder . $this->base_name;
             $destination_folder = WP_CONTENT_DIR . '/themes/' . $this->base_name;
@@ -23,6 +25,11 @@ class ThemeUpdateProcess extends UpdateProcess
                 throw new Exception('Unable to move the new theme to destination folder');
             }
 
+            /* Delete temporal folder */
+            $delete_folder = $wp_filesystem->rmdir($this->random_folder);
+            if ($delete_folder === false) {
+              throw new Exception('Unable to delete theme temporal folder');
+            }
 
           } catch (Exception $e) {
             return new WP_Error( 'ThemeUpdateProcess error', __($e->getMessage()), array( 'status' => 500 ) );

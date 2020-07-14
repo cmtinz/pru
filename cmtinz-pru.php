@@ -12,7 +12,7 @@
  * @package         cmtinz/pru
  */
 
-// Your code starts here  
+// Your code starts here
 
 require_once('UpdateProcess.php');
 require_once('UpdateRequest.php');

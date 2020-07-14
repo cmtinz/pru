@@ -47,7 +47,6 @@ class UpdateRequest extends WP_REST_Controller
         $files = $request->get_file_params();
         $name = $request->get_param('name');
         $baseName = $request->get_param('baseName');
-        $checksum = $request->get_param('checksum');
         $signature = $request->get_param('signature');
       
         if (!$this->component_exists($type, $name, $baseName)) {

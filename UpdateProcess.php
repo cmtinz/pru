@@ -21,7 +21,7 @@ class UpdateProcess
     
     }
 
-    protected function unzip_component() {
+    protected function unzip_component($zip_destination) {
 
         if ( !function_exists( 'WP_Filesystem' ) ) {
           require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -30,7 +30,7 @@ class UpdateProcess
       
         $random_string =  base64_encode(random_bytes(8));
         $random_string = str_replace(['+', '/', '='], '', $random_string);
-        $this->random_folder = get_temp_dir() . "$random_string.pru/";
+        $this->random_folder = $zip_destination . "$random_string.pru/";
       
         $result = unzip_file($this->file['tmp_name'], $this->random_folder);
       

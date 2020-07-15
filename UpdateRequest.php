@@ -58,17 +58,29 @@ class UpdateRequest extends WP_REST_Controller
         }
         
         $file = array_shift($files);
-      
-        if (!$this->verify_file_type($file)) {
-          return new WP_Error( 'invalid_mime_type', __('The plugin file provided does not match the required MIME type.'), array( 'status' => 400 ) );
+
+        if ($file['error'] != 0) {
+          return new WP_Error(
+            'file_reception_error', 
+            sprintf(__('File upload error: %d. Check https://www.php.net/manual/en/features.file-upload.errors.php for code explanation.'), $file['error']),
+            array( 'status' => 500 )
+          );
         }
       
-        $public_key = get_option('_pru_public_key');
+        if (!$this->verify_file_type($file)) {
+          return new WP_Error(
+            'invalid_mime_type', 
+            sprintf(__('The plugin file provided does not match the required MIME type. Provided: %s.'), $file['type']),
+            array( 'status' => 400 )
+          );
+        }
+      
+        $public_key = get_option('_pru_public_key', NULL);
         if (!$public_key) {
           return new WP_Error( 'public_key_unset', __('The public key has been not set in the server.'), array( 'status' => 500 ) );
         }
       
-        if ($this->verify_sigurature($file, $signature, $public_key) === 0) {
+        if (!$this->verify_sigurature($file, $signature, $public_key)) {
           return new WP_Error( 'bad_signtature', __('The signature can not be verified.'), array( 'status' => 400 ) );
         }
       
@@ -107,7 +119,7 @@ class UpdateRequest extends WP_REST_Controller
     public function verify_file_type($file) {
     
         if ($file['type'] === 'application/zip') {
-        return true;
+          return true;
         }
     
         return false;

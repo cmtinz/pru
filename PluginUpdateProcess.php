@@ -82,17 +82,17 @@ private function update_process() {
 
 }
 
-private function is_file_plugin($folder, $slug) {
-  
-  if (file_exists($folder . $slug . ".php")) {
-    return true;
-  }
-  if (file_exists($folder . $slug)) {
-    return false;
-  }
+  private function is_file_plugin($folder, $slug) {
+    
+    if (file_exists($folder . $slug . ".php")) {
+      return true;
+    }
+    if (file_exists($folder . $slug)) {
+      return false;
+    }
 
-  throw new Exception('Invalid plugin');
+    throw new Exception('Invalid plugin');
 
-}
+  }
 
 }
